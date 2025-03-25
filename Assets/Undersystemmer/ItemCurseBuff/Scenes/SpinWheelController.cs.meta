@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2f07eba8d66d0634d8da1ba5b5460e8f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - SpinWheelImg: {instanceID: 0}
+  - SpinWheelData: {fileID: 11400000, guid: 6f710d1355117044dbc0a6a66ad32fb2, type: 2}
+  - SpinBtn: {instanceID: 0}
+  - FingerSpinWheel: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
