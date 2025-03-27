@@ -1,58 +1,137 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // Husk at bruge TextMeshPro
 
 public class SpinWheelController : MonoBehaviour
 {
-    public Image SpinWheelImg;  // UI Image fra Canvas
-    public SpinWheelImageSO SpinWheelData; // ScriptableObject med billede
-    public Button SpinBtn; // Knap til at starte spin
-    public RectTransform FingerSpinWheel; // Pilen der peger på hjulet
+    public Image SpinWheelImg;
+    public SpinWheelImageSO SpinWheelData;
+    public Button SpinBtn;
+    public RectTransform FingerSpinWheel;
+    public GameObject SpinCanvas;
+    public GameObject AffectedObject;
+    public TMP_Text StatsText; // UI-tekst til stats
 
     private SpinWheelManager spinWheelManager;
+    private Renderer objectRenderer;
+
+    // Spillerens stats
+    private int health = 100;
+    private float speed = 5f;
+    private float blindness = 0f; // I procent
+    private bool wheelchairBound = false;
+    private float stealth = 0f; // I procent
+    private bool gamblingMeter = false;
+    private float energyDepletion = 0f; // I procent
 
     void Start()
     {
         spinWheelManager = new SpinWheelManager(SpinWheelImg, SpinWheelData, RotateWheel, HandleSegmentHit);
-        SpinBtn.onClick.AddListener(StartSpin); // Når man trykker på knappen, starter spin
+        SpinBtn.onClick.AddListener(StartSpin);
+
+        SpinCanvas.SetActive(false); // Skjuler Canvas fra start
+
+        if (AffectedObject != null)
+            objectRenderer = AffectedObject.GetComponent<Renderer>();
+
+        UpdateStatsUI(); // Viser start-stats
     }
 
     void Update()
     {
-        spinWheelManager.UpdateSpin(Time.deltaTime); // Opdaterer rotation i Unity's Update
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleCanvas();
+        }
+
+        spinWheelManager.UpdateSpin(Time.deltaTime);
     }
 
     private void StartSpin()
     {
-        spinWheelManager.StartSpin(5000f); // Starter spin med lavere hastighed (ændret fra 1000f)
+        spinWheelManager.StartSpin(3000f);
     }
 
     private void RotateWheel(float rotationAmount)
     {
-        SpinWheelImg.transform.Rotate(0, 0, rotationAmount); // Drejer hjulet
+        SpinWheelImg.transform.Rotate(0, 0, rotationAmount);
     }
 
-    // Håndterer hvad der sker, når vi rammer et segment
     private void HandleSegmentHit(int segment)
     {
-        Debug.Log("Segment Hit: " + segment);
+        if (AffectedObject == null) return;
 
-        // Her kan du bruge `segment` til at vise ny ting
-        // For eksempel, ændre teksten eller vise noget nyt baseret på segmentet
-        // Hvis du har 7 felter, kan du tilknytte en ting til hver sektion:
         switch (segment)
         {
             case 0:
-                // Skift til noget nyt
-                Debug.Log("hej");
+                health += 20;
+                Debug.Log("Buff: Mere HP!");
+                ChangeObjectColor(Color.red);
                 break;
             case 1:
-                // Skift til noget andet
-                Debug.Log("hej");
+                wheelchairBound = true;
+                speed = 0;
+                Debug.Log("Curse: Wheelchair bound!");
+                ChangeObjectColor(Color.yellow);
                 break;
-            // ... fortsæt for de andre sektioner
-
-            default:
+            case 2:
+                speed += 2f;
+                Debug.Log("Buff: Hurtigere bevægelse!");
+                ChangeObjectColor(Color.yellow);
+                break;
+            case 3:
+                gamblingMeter = true;
+                Debug.Log("Curse: Gambling meter!");
+                ChangeObjectColor(Color.green);
+                break;
+            case 4:
+                stealth += 25f;
+                if (stealth > 100f) stealth = 100f;
+                Debug.Log("Buff: Stealth øget!");
+                ChangeObjectColor(Color.blue);
+                break;
+            case 5:
+                blindness += 50f;
+                if (blindness > 100f) blindness = 100f;
+                Debug.Log("Curse: Blindness øget!");
+                ChangeObjectColor(new Color(0.5f, 0f, 0.5f));
+                break;
+            case 6:
+                energyDepletion += 30f;
+                if (energyDepletion > 100f) energyDepletion = 100f;
+                Debug.Log("Curse: Energy depletion øget!");
+                ChangeObjectColor(Color.magenta);
                 break;
         }
+
+        UpdateStatsUI(); // Opdater stats i UI
+    }
+
+    private void ChangeObjectColor(Color newColor)
+    {
+        if (objectRenderer == null)
+            objectRenderer = AffectedObject.GetComponent<Renderer>();
+
+        if (objectRenderer != null)
+            objectRenderer.material.color = newColor;
+    }
+
+    private void UpdateStatsUI()
+    {
+        if (StatsText != null)
+        {
+            StatsText.text = $"HP: {health}\n" +
+                             $"Speed: {speed}\n" +
+                             $"Blindness: {blindness}%\n" +
+                             $"Wheelchair Bound: {(wheelchairBound ? "Yes" : "No")}\n" +
+                             $"Stealth: {stealth}%\n" +
+                             $"Gambling Meter: {(gamblingMeter ? "Yes" : "No")}\n" +
+                             $"Energy Depletion: {energyDepletion}%";
+        }
+    }
+
+    private void ToggleCanvas()
+    {
+        SpinCanvas.SetActive(!SpinCanvas.activeSelf);
     }
 }
