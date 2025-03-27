@@ -5,44 +5,41 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 5f;
-    public float maxSpeed = 10f;
-    public Rigidbody rb;
-
-    public Transform groundCheck;
-    public float groundDistance = 0.3f;
+    public float moveSpeed = 6f;
+    public float jumpForce = 7f;
+    public float groundCheckDistance = 0.2f;
     public LayerMask groundMask;
 
+    private Rigidbody rb;
     private bool isGrounded;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; // Prevents unwanted rotation when moving
+        rb.freezeRotation = true; // Prevents the Rigidbody from rotating on physics impact
     }
 
     void Update()
     {
-        // Check if player is grounded
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        MovePlayer();
+        Jump();
+    }
 
-        // Get movement input
+    void MovePlayer()
+    {
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        // Move player
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
-        rb.AddForce(move * moveSpeed, ForceMode.Acceleration);
+        Vector3 moveDirection = transform.right * moveX + transform.forward * moveZ;
+        Vector3 moveVelocity = moveDirection * moveSpeed;
 
-        // Limit max speed
-        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        if (flatVelocity.magnitude > maxSpeed)
-        {
-            rb.velocity = flatVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y;
-        }
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+    }
 
-        // Jumping
+    void Jump()
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
