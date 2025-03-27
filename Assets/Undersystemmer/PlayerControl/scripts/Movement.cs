@@ -113,7 +113,7 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Menu (ESC) åbnet");
+            Debug.Log("Menu (ESC) open");
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -147,34 +147,34 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("Våben 1 valgt");
+            Debug.Log("Weapon 1 valgt");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("Våben 2 valgt");
+            Debug.Log("Weapon 2 valgt");
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("Våben 3 valgt");
+            Debug.Log("Weapon 3 valgt");
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Debug.Log("Våben 4 valgt");
+            Debug.Log("Weapon 4 valgt");
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
-            Debug.Log("Næste våben valgt");
+            Debug.Log("Næste weapon valgt");
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
         {
-            Debug.Log("Forrige våben valgt");
+            Debug.Log("Forrige weapon valgt");
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             isTabletOpen = !isTabletOpen;
-            Debug.Log(isTabletOpen ? "Tablet/iPad åbnet" : "Tablet/iPad lukket");
+            Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
         }
     }
 }
