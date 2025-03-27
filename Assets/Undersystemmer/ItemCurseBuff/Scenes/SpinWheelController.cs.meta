@@ -8,6 +8,9 @@ MonoImporter:
   - SpinWheelData: {fileID: 11400000, guid: 6f710d1355117044dbc0a6a66ad32fb2, type: 2}
   - SpinBtn: {instanceID: 0}
   - FingerSpinWheel: {instanceID: 0}
+  - SpinCanvas: {instanceID: 0}
+  - AffectedObject: {fileID: 5921753829735497071, guid: 9ae5788c3efbb8f4982caa247214eccc,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
