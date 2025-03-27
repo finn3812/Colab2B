@@ -28,6 +28,8 @@ public class Movement : MonoBehaviour
     Vector2 currentDirVelocity;
     Vector3 velocity;
 
+    bool isTabletOpen = false; // Holder styr på, om tablet er åben
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -43,6 +45,7 @@ public class Movement : MonoBehaviour
     {
         UpdateMouse();
         UpdateMove();
+        CheckKeybinds();
     }
 
     void UpdateMouse()
@@ -80,10 +83,101 @@ public class Movement : MonoBehaviour
             velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        if (isGrounded! && controller.velocity.y < -1f)
+        if (!isGrounded && controller.velocity.y < -1f)
         {
             velocityY = -8f;
         }
     }
+
+    void CheckKeybinds()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Brug (E) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Reload (R) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Drop (G) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("Kast (Q) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Menu (ESC) åbnet");
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Speed = 10.0f; // Sprint
+        }
+        else
+        {
+            Speed = 6.0f; // Normal hastighed
+        }
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Debug.Log("Duk (Ctrl) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("Lommelygte (F) tændt/slukket");
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Sigtning (Højreklik) aktiveret");
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Våben 1 valgt");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("Våben 2 valgt");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("Våben 3 valgt");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Debug.Log("Våben 4 valgt");
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
+            Debug.Log("Næste våben valgt");
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        {
+            Debug.Log("Forrige våben valgt");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            isTabletOpen = !isTabletOpen;
+            Debug.Log(isTabletOpen ? "Tablet/iPad åbnet" : "Tablet/iPad lukket");
+        }
+    }
 }
+
+
 
