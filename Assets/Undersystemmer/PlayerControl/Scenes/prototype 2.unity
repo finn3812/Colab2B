@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 1562965961}
   - component: {fileID: 1562965960}
   m_Layer: 0
-  m_Name: groundMask
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -514,7 +514,7 @@ GameObject:
   - component: {fileID: 1704516636}
   - component: {fileID: 1704516635}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Bean
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -527,17 +527,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1704516634}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 540f05b286f050448a3c27f0daab9188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 5
-  maxSpeed: 10
-  rb: {fileID: 0}
-  groundCheck: {fileID: 0}
-  groundDistance: 0.4
+  groundCheckDistance: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 0
@@ -548,13 +545,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1704516634}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b63e1c1bb8cc5c741b6dd70f860f2c0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
-  playerBody: {fileID: 0}
+  mouseSensitivity: 400
+  playerBody: {fileID: 1704516641}
 --- !u!54 &1704516637
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -580,7 +577,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 108
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!136 &1704516638
 CapsuleCollider:
@@ -682,7 +679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2003035260}
   m_Layer: 0
-  m_Name: groundCheck
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
