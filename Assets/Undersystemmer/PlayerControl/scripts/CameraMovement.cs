@@ -6,28 +6,27 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 200f;
     public Transform playerBody;
 
     private float xRotation = 0f;
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Locks the cursor in the game window
+        Cursor.lockState = CursorLockMode.Locked; // Locks cursor to the game window
     }
 
     void Update()
     {
-        // Get mouse input
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Rotate player body left/right
+        // Rotate player horizontally
         playerBody.Rotate(Vector3.up * mouseX);
 
-        // Rotate camera up/down
+        // Rotate camera vertically
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Prevents looking too far up/down
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Prevents flipping
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 }
