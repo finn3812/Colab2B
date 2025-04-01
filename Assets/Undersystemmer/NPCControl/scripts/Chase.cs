@@ -2,17 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chase : MonoBehaviour
+public class Chase : IState
 {
-    // Start is called before the first frame update
-    void Start()
+    NPC npc;
+    public Chase(NPC npc)
     {
-        
+        this.npc = npc;
+    }
+    // Start is called before the first frame update
+
+    public void Enter()
+    {
+        Debug.Log("NPC er nu i Idle-tilstand");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        
+        // Implementér opdateringslogik her
+    }
+
+    public void Exit()
+    {
+        Debug.Log("NPC forlader Idle-tilstand");
+    }
+
+    void Start()
+    {
+        npc.TransitionToState(new Roam(npc));
     }
 }
+
+
