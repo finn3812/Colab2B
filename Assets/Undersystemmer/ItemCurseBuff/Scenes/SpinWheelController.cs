@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Husk at bruge TextMeshPro
+using TMPro;
 
 public class SpinWheelController : MonoBehaviour
 {
@@ -10,31 +10,40 @@ public class SpinWheelController : MonoBehaviour
     public RectTransform FingerSpinWheel;
     public GameObject SpinCanvas;
     public GameObject AffectedObject;
-    public TMP_Text StatsText; // UI-tekst til stats
+    public TMP_Text StatsText;
+    public Slider GamblingMeterUI; // UI Slider til Gambling Meter
 
     private SpinWheelManager spinWheelManager;
     private Renderer objectRenderer;
 
-    // Spillerens stats
     private int health = 100;
     private float speed = 5f;
-    private float blindness = 0f; // I procent
+    private float blindness = 0f;
     private bool wheelchairBound = false;
-    private float stealth = 0f; // I procent
+    private float stealth = 0f;
     private bool gamblingMeter = false;
-    private float energyDepletion = 0f; // I procent
+    private float energyDepletion = 0f;
+    private float gamblingMeterValue = 0f; // Starter på 0%
+
+    private float gamblingIncreaseRate = 5f; // Hvor hurtigt den stiger per sekund
 
     void Start()
     {
         spinWheelManager = new SpinWheelManager(SpinWheelImg, SpinWheelData, RotateWheel, HandleSegmentHit);
         SpinBtn.onClick.AddListener(StartSpin);
 
-        SpinCanvas.SetActive(false); // Skjuler Canvas fra start
+        SpinCanvas.SetActive(false);
 
         if (AffectedObject != null)
             objectRenderer = AffectedObject.GetComponent<Renderer>();
 
-        UpdateStatsUI(); // Viser start-stats
+        if (GamblingMeterUI != null)
+        {
+            GamblingMeterUI.value = gamblingMeterValue;
+            GamblingMeterUI.gameObject.SetActive(false); // Skjuler slideren fra start
+        }
+
+        UpdateStatsUI();
     }
 
     void Update()
@@ -45,16 +54,30 @@ public class SpinWheelController : MonoBehaviour
         }
 
         spinWheelManager.UpdateSpin(Time.deltaTime);
+
+        // Gambling meter stiger over tid, hvis den er aktiveret
+        if (gamblingMeter && GamblingMeterUI.gameObject.activeSelf)
+        {
+            gamblingMeterValue += gamblingIncreaseRate * Time.deltaTime;
+            gamblingMeterValue = Mathf.Clamp(gamblingMeterValue, 0, 1000);
+
+            if (GamblingMeterUI != null)
+                GamblingMeterUI.value = gamblingMeterValue;
+        }
     }
 
     private void StartSpin()
     {
         spinWheelManager.StartSpin(3000f);
+        ResetGamblingMeter(); // Resetter gambling meter ved spin
     }
 
     private void RotateWheel(float rotationAmount)
     {
-        SpinWheelImg.transform.Rotate(0, 0, rotationAmount);
+        if (SpinWheelImg != null)
+        {
+            SpinWheelImg.rectTransform.Rotate(0, 0, -rotationAmount); // Roterer mod uret
+        }
     }
 
     private void HandleSegmentHit(int segment)
@@ -79,32 +102,47 @@ public class SpinWheelController : MonoBehaviour
                 Debug.Log("Buff: Hurtigere bevægelse!");
                 ChangeObjectColor(Color.yellow);
                 break;
-            case 3:
-                gamblingMeter = true;
+            case 3: // Gambling Meter-segment
+                if (!gamblingMeter) // Kun hvis spilleren ikke har fået den før
+                {
+                    gamblingMeter = true;
+                    if (GamblingMeterUI != null)
+                        GamblingMeterUI.gameObject.SetActive(true); // Gør slideren synlig første gang
+                }
                 Debug.Log("Curse: Gambling meter!");
                 ChangeObjectColor(Color.green);
                 break;
             case 4:
                 stealth += 25f;
-                if (stealth > 100f) stealth = 100f;
+                stealth = Mathf.Clamp(stealth, 0, 100);
                 Debug.Log("Buff: Stealth øget!");
                 ChangeObjectColor(Color.blue);
                 break;
             case 5:
                 blindness += 50f;
-                if (blindness > 100f) blindness = 100f;
+                blindness = Mathf.Clamp(blindness, 0, 100);
                 Debug.Log("Curse: Blindness øget!");
                 ChangeObjectColor(new Color(0.5f, 0f, 0.5f));
                 break;
             case 6:
                 energyDepletion += 30f;
-                if (energyDepletion > 100f) energyDepletion = 100f;
+                energyDepletion = Mathf.Clamp(energyDepletion, 0, 100);
                 Debug.Log("Curse: Energy depletion øget!");
                 ChangeObjectColor(Color.magenta);
                 break;
         }
 
-        UpdateStatsUI(); // Opdater stats i UI
+        UpdateStatsUI();
+    }
+
+    private void ResetGamblingMeter()
+    {
+        if (gamblingMeter)
+        {
+            gamblingMeterValue = 0;
+            if (GamblingMeterUI != null)
+                GamblingMeterUI.value = gamblingMeterValue;
+        }
     }
 
     private void ChangeObjectColor(Color newColor)
@@ -125,7 +163,7 @@ public class SpinWheelController : MonoBehaviour
                              $"Blindness: {blindness}%\n" +
                              $"Wheelchair Bound: {(wheelchairBound ? "Yes" : "No")}\n" +
                              $"Stealth: {stealth}%\n" +
-                             $"Gambling Meter: {(gamblingMeter ? "Yes" : "No")}\n" +
+                             $"Gambling Meter: {gamblingMeterValue}%\n" +
                              $"Energy Depletion: {energyDepletion}%";
         }
     }
