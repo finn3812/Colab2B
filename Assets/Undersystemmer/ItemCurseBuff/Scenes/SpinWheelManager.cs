@@ -54,7 +54,6 @@ public class SpinWheelManager
             isSpinning = false;
             DetermineSegment(); // Kalder kun segment-funktionen når hjulet stopper
         }
-
     }
 
     private void DetermineSegment()
