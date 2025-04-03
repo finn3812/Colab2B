@@ -15,10 +15,8 @@ public class NPC : MonoBehaviour
 {
     public Transform player;
     private IState currentState;
-    // public Player player;
     public float WalkSpeed;
     public float RunSpeed;
-    // Public Navmesh
     public Transform[] WayPoints;
     public bool Night;
     // public Animation
@@ -36,9 +34,19 @@ public class NPC : MonoBehaviour
 
     private void Start()
     {
-        TransitionToState(new Idle(this));
+        // Get the agent component FIRST
         agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogError("NPC requires a NavMeshAgent component!", this);
+            enabled = false; // Stop the script if no agent
+            return;
+        }
+
+        // THEN transition to the initial state
+        TransitionToState(new Idle(this));
     }
+
     public void Update()
     {
         currentState.Update();
