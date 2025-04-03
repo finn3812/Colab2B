@@ -323,13 +323,13 @@ MonoBehaviour:
   mouseSmoothTime: 0.03
   cursorLock: 1
   mouseSensitivity: 3.5
-  Speed: 6
+  baseSpeed: 6
   moveSmoothTime: 0.3
   gravity: -30
   groundCheck: {fileID: 5818419647443059465}
   ground:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   jumpHeight: 6
 --- !u!143 &8337678469442114318
 CharacterController:
