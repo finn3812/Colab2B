@@ -18,7 +18,10 @@ public class Chase : IState
 
     public void Update()
     {
-        // Implementér opdateringslogik her
+        if (npc.AttackRange >= Vector3.Distance(npc.player.transform.position, npc.transform.position)) 
+        {
+            npc.TransitionToState(new Attack(npc));
+        }
     }
 
     public void Exit()
