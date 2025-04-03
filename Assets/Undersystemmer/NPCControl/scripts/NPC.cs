@@ -50,6 +50,15 @@ public class NPC : MonoBehaviour
     public void Update()
     {
         currentState.Update();
+        Debug.Log(currentState.ToString());
+        if (currentState.ToString() == "Chase")
+        {
+            ViewAngle = 360;
+        }
+        else 
+        {
+            ViewAngle = 180;
+        }
     }
     public void TransitionToState(IState newState)
     {

@@ -1,26 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Chase : IState
 {
+    private readonly NavMeshAgent agent;
     NPC npc;
     public Chase(NPC npc)
     {
         this.npc = npc;
+        agent = npc.agent;
     }
     // Start is called before the first frame update
 
     public void Enter()
     {
-        Debug.Log("NPC er nu i Idle-tilstand");
+        agent.speed = npc.RunSpeed; // Use walk speed for roaming
+        agent.isStopped = false; // Ensure agent can move
     }
 
     public void Update()
     {
+        agent.SetDestination(npc.player.position);
         if (npc.AttackRange >= Vector3.Distance(npc.player.transform.position, npc.transform.position)) 
         {
             npc.TransitionToState(new Attack(npc));
+        }
+
+        if (!npc.CanSeePlayer())
+        {
+            npc.TransitionToState(new Suspicious(npc));
         }
     }
 
@@ -29,10 +39,6 @@ public class Chase : IState
         Debug.Log("NPC forlader Idle-tilstand");
     }
 
-    void Start()
-    {
-        npc.TransitionToState(new Roam(npc));
-    }
 }
 
 
