@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
 
-public class Suspicious : MonoBehaviour
+public class Suspicious : IState
 { 
     
     NPC npc;
