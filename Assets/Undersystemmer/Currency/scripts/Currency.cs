@@ -5,39 +5,61 @@ using UnityEngine;
 
 public class Currency : MonoBehaviour
 {
-    public TMP_Text GuldMængde; 
+    public static Currency instance { get; private set; }
+    public TMP_Text GuldMængde;
     public int Penge;
     public int MønteMængde;
     // Start is called before the first frame update
+
+
+    private void Awake()
+
+    {
+        if (instance != null && this != instance)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+
     void Start()
     {
         GuldMængde.text = Penge + " Guld";
     }
 
-    void SamlMønt()
+    public void SamlMønt()
     {
         MønteMængde = Random.Range(1, 17);
+        Penge = Penge + MønteMængde;
+        GetMoney();
         Debug.Log("Dødspengene er " + MønteMængde);
     }
-    void GetMoney()
+    public void GetMoney()
     {
-       GuldMængde.text = Penge + " Guld";
+        GuldMængde.text = Penge + " Guld";
     }
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-    if (Input.GetKeyDown(KeyCode.G))
-    {
-        Penge=Penge+2;
-        GetMoney();
-        Debug.Log("knaptryk er trykket");
-    }
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            SamlMønt();
-            Penge = Penge + MønteMængde;
+            Penge = Penge + 2;
             GetMoney();
             Debug.Log("knaptryk er trykket");
         }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            SamlMønt();
+            Debug.Log("knaptryk er trykket");
+        }
     }
+    
+    
+
+    
 }
