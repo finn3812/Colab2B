@@ -31,7 +31,7 @@ public class NPC : MonoBehaviour
     public Transform PlaterPosition;
     public Vector3 lastKnownPosition;
     public NavMeshAgent agent;
-    public int Health;
+    public int Health; 
 
 
     private void Start()
