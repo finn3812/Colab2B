@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b8ae4882ca6ad0e42971aad52ef34b96
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - musicSource: {instanceID: 0}
+  - dayMusic: {instanceID: 0}
+  - nightMusic: {instanceID: 0}
+  - sfxSourcePrefab: {instanceID: 0}
+  - finnRoamingSound: {fileID: 8300000, guid: 809dee1f03f3832418b3d047069b3499, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
