@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class testtid : MonoBehaviour
 {
+    DayTrigger time;
     // Start is called before the first frame update
     void Start()
     {
         //DayTrigger.instance.onDayChange.AddListener(testDayTrigger);
+        time = DayTrigger.instance;
+
         NightTrigger.instance.onNightChange.AddListener(testNightTrigger);
     }
     
@@ -25,7 +28,7 @@ public class testtid : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
-        //    DayTrigger.instance.isDay();
+            DayTrigger.instance.isDay();
         }
     }
 }
