@@ -6,7 +6,6 @@ public class Idle : IState
 {
     private readonly NPC npc; // Reference to the NPC owner
     private readonly NavMeshAgent agent; // Reference to the agent
-
     private float idleTimer; // How long we've been idling
     private float idleDuration; // How long we should idle for (chosen randomly)
 

@@ -12,4 +12,14 @@ public class klokke : MonoBehaviour
     {
         clockText.text = DateTime.Now.ToString("HH:mm:ss"); // Viser timer, minutter og sekunder
     }
+
+
+
+
+    
 }
+
+
+
+
+
