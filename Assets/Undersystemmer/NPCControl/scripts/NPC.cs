@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,13 +30,16 @@ public class NPC : MonoBehaviour
     public Transform PlaterPosition;
     public Vector3 lastKnownPosition;
     public NavMeshAgent agent;
-    public int Health; 
+    public int Health;
+    SphereCollider SpCollider;
 
 
     private void Start()
     {
+        SpCollider = transform.GetComponent<SphereCollider>();
         // Get the agent component FIRST
         agent = GetComponent<NavMeshAgent>();
+        
         if (agent == null)
         {
             Debug.LogError("NPC requires a NavMeshAgent component!", this);
@@ -88,7 +92,12 @@ public class NPC : MonoBehaviour
             }
         }
         return false;
-        }
+    }
+    public bool CanHearPlayer()
+    {
+        SpCollider.radius = 5;
+        return false;
+    }
     public bool IsPlayerInAttackRange()
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
