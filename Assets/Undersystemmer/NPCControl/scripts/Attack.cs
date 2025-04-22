@@ -14,11 +14,13 @@ public class Attack : IState
     public void Enter()
     {
         Debug.Log("NPC er nu i Idle-tilstand");
+       
     }
 
     public void Update()
     {
         // Implementér opdateringslogik her
+       
     }
 
     public void Exit()
