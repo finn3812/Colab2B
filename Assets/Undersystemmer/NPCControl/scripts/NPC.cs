@@ -51,7 +51,7 @@ public class NPC : MonoBehaviour
         TransitionToState(new Idle(this));
     }
 
-    virtual public void Update()
+    public void Update()
     {
         currentState.Update();
         Debug.Log(currentState.ToString());
@@ -63,8 +63,17 @@ public class NPC : MonoBehaviour
         {
             ViewAngle = 180;
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpCollider.radius = 5;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SpCollider.radius = 1;
+        }
     }
-    virtual public void TransitionToState(IState newState)
+    public void TransitionToState(IState newState)
     {
         if (currentState != null)
         {
@@ -73,7 +82,7 @@ public class NPC : MonoBehaviour
         currentState = newState;
         currentState.Enter();
     }
-    virtual public bool CanSeePlayer()
+    public bool CanSeePlayer()
     {
         Vector3 directionToPlayer = player.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
@@ -93,12 +102,12 @@ public class NPC : MonoBehaviour
         }
         return false;
     }
-    virtual public bool CanHearPlayer()
+    public bool CanHearPlayer()
     {
         SpCollider.radius = 5;
         return false;
     }
-    virtual public bool IsPlayerInAttackRange()
+    public bool IsPlayerInAttackRange()
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
     }
