@@ -16,30 +16,35 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxSourcePrefab;
     private List<AudioSource> active3DSounds = new List<AudioSource>();
 
-    [Header("NPC-lyde")]
-    public AudioClip finnRoamingSound; // Lydeffekt til Finn
+    [Header("Roaming")]
+    public AudioClip finnRoamingSound; 
+    public AudioClip BaseRoamingSound; 
+    public AudioClip BoRoamingSound;
+    public AudioClip HansRoamingSound;
+    
 
-    [Header("NPC-lyde")]
-    public AudioClip finnChasingSound; // Lydeffekt til Finn
+    [Header("Chasing")]
+    public AudioClip finnChasingSound; 
+    public AudioClip BaseChasingSound;
+    public AudioClip BoChasingSound;
+    public AudioClip HansChasingSound;
+    public AudioClip KantinedameChasingSound;
 
-    [Header("NPC-lyde")]
-    public AudioClip finnAttackSound; // Lydeffekt til Finn
+    [Header("Attack")]
+    public AudioClip finnAttackSound; 
+    public AudioClip BaseAttackSound; 
+    public AudioClip BoAttackSound;
+    public AudioClip HansAttackSound;
+    public AudioClip KantinedameAttackSound;
 
-    [Header("NPC-lyde")]
-    public AudioClip finnDeadSound; // Lydeffekt til Finn
+    [Header("Dead")]
+    public AudioClip finnDeadSound; 
+    public AudioClip BaseDeadSound; 
+    public AudioClip BoDeadSound;
+    public AudioClip HansDeadSound;
+    public AudioClip KantinedameDeadSound;
 
 
-    [Header("NPC-lyde")]
-    public AudioClip BaseRoamingSound; // Lydeffekt til Finn
-
-    [Header("NPC-lyde")]
-    public AudioClip BaseChasingSound; // Lydeffekt til Finn
-
-    [Header("NPC-lyde")]
-    public AudioClip BaseAttackSound; // Lydeffekt til Finn
-
-    [Header("NPC-lyde")]
-    public AudioClip BaseDeadSound; // Lydeffekt til Finn
 
     private void Awake()
     {
