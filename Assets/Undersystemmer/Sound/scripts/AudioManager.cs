@@ -19,6 +19,28 @@ public class AudioManager : MonoBehaviour
     [Header("NPC-lyde")]
     public AudioClip finnRoamingSound; // Lydeffekt til Finn
 
+    [Header("NPC-lyde")]
+    public AudioClip finnChasingSound; // Lydeffekt til Finn
+
+    [Header("NPC-lyde")]
+    public AudioClip finnAttackSound; // Lydeffekt til Finn
+
+    [Header("NPC-lyde")]
+    public AudioClip finnDeadSound; // Lydeffekt til Finn
+
+
+    [Header("NPC-lyde")]
+    public AudioClip BaseRoamingSound; // Lydeffekt til Finn
+
+    [Header("NPC-lyde")]
+    public AudioClip BaseChasingSound; // Lydeffekt til Finn
+
+    [Header("NPC-lyde")]
+    public AudioClip BaseAttackSound; // Lydeffekt til Finn
+
+    [Header("NPC-lyde")]
+    public AudioClip BaseDeadSound; // Lydeffekt til Finn
+
     private void Awake()
     {
         if (Instance == null) Instance = this;

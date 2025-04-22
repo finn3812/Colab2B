@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class Movement : MonoBehaviour
 {
@@ -36,13 +34,13 @@ public class Movement : MonoBehaviour
     private float velocityY;
     private bool isGrounded;
 
-    private float cameraCap;
-    private Vector2 currentMouseDelta;
-    private Vector2 currentMouseDeltaVelocity;
+    float cameraCap;
+    Vector2 currentMouseDelta;
+    Vector2 currentMouseDeltaVelocity;
 
-    private CharacterController controller;
-    private Vector2 currentDir;
-    private Vector2 currentDirVelocity;
+    CharacterController controller;
+    Vector2 currentDir;
+    Vector2 currentDirVelocity;
 
     private bool isTabletOpen = false;
 
@@ -64,6 +62,7 @@ public class Movement : MonoBehaviour
     void UpdateMouse()
     {
         Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
         currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
         cameraCap -= currentMouseDelta.y * mouseSensitivity;
@@ -104,14 +103,45 @@ public class Movement : MonoBehaviour
 
     void CheckKeybinds()
     {
-        if (Input.GetKeyDown(KeyCode.E)) Debug.Log("Brug (E) aktiveret");
-        if (Input.GetKeyDown(KeyCode.R)) Debug.Log("Reload (R) aktiveret");
-        if (Input.GetKeyDown(KeyCode.G)) Debug.Log("Drop (G) aktiveret");
-        if (Input.GetKeyDown(KeyCode.Q)) Debug.Log("Kast (Q) aktiveret");
-        if (Input.GetKeyDown(KeyCode.Escape)) Debug.Log("Menu (ESC) open");
-        if (Input.GetKeyDown(KeyCode.F)) Debug.Log("Lommelygte (F) tændt/slukket");
-        if (Input.GetMouseButtonDown(1)) Debug.Log("Sigtning (Højreklik) aktiveret");
-        if (Input.GetMouseButtonDown(0)) Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Brug (E) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Reload (R) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Drop (G) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("Kast (Q) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Menu (ESC) open");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("Lommelygte (F) tændt/slukket");
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Sigtning (Højreklik) aktiveret");
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
+        }
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -119,23 +149,44 @@ public class Movement : MonoBehaviour
             Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && staminaSystem.HasStamina(1f) && currentDir.y > 0)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed = 10.0f;
-            staminaSystem.UseStamina(Time.deltaTime * 20f);
         }
         else
         {
             currentSpeed = baseSpeed;
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) Debug.Log("Næste weapon valgt");
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f) Debug.Log("Forrige weapon valgt");
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
+            Debug.Log("Næste weapon valgt");
+        }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) Debug.Log("Weapon 1 valgt");
-        if (Input.GetKeyDown(KeyCode.Alpha2)) Debug.Log("Weapon 2 valgt");
-        if (Input.GetKeyDown(KeyCode.Alpha3)) Debug.Log("Weapon 3 valgt");
-        if (Input.GetKeyDown(KeyCode.Alpha4)) Debug.Log("Weapon 4 valgt");
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        {
+            Debug.Log("Forrige weapon valgt");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Weapon 1 valgt");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("Weapon 2 valgt");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("Weapon 3 valgt");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Debug.Log("Weapon 4 valgt");
+        }
     }
 
     void ApplyHeadbob()

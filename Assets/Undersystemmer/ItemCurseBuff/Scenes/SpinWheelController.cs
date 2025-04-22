@@ -12,6 +12,7 @@ public class SpinWheelController : MonoBehaviour
     public GameObject AffectedObject;
     public TMP_Text StatsText;
     public Slider GamblingMeterUI; // UI Slider til Gambling Meter
+    public Movement playerMovement;  // Reference til Movement scriptet
 
     private SpinWheelManager spinWheelManager;
     private Renderer objectRenderer;
@@ -63,6 +64,16 @@ public class SpinWheelController : MonoBehaviour
 
             if (GamblingMeterUI != null)
                 GamblingMeterUI.value = gamblingMeterValue;
+        }
+
+        // Hvis SpinCanvas er aktiv, deaktiver musens bevægelse
+        if (SpinCanvas.activeSelf)
+        {
+            DisablePlayerMovement();
+        }
+        else
+        {
+            EnablePlayerMovement();
         }
     }
 
@@ -171,5 +182,21 @@ public class SpinWheelController : MonoBehaviour
     private void ToggleCanvas()
     {
         SpinCanvas.SetActive(!SpinCanvas.activeSelf);
+    }
+
+    private void DisablePlayerMovement()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false; // Deaktiverer bevægelse
+        }
+    }
+
+    private void EnablePlayerMovement()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true; // Genaktiverer bevægelse
+        }
     }
 }
