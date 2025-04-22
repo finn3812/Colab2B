@@ -149,13 +149,15 @@ public class Movement : MonoBehaviour
             Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        // Sprinting logic
+        if (Input.GetKey(KeyCode.LeftShift) && staminaSystem.HasStamina(1f) && currentDir.magnitude > 0.1f)
         {
-            currentSpeed = 10.0f;
+            currentSpeed = 10.0f; // Sprint speed
+            staminaSystem.UseStamina(Time.deltaTime * 20f); // Drain stamina per second
         }
         else
         {
-            currentSpeed = baseSpeed;
+            currentSpeed = baseSpeed; // Walking speed
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
