@@ -34,6 +34,8 @@ public class NPC : MonoBehaviour
     SphereCollider SpCollider;
 
 
+
+
     private void Start()
     {
         SpCollider = transform.GetComponent<SphereCollider>();
