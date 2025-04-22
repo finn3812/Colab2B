@@ -109,8 +109,8 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G)) Debug.Log("Drop (G) aktiveret");
         if (Input.GetKeyDown(KeyCode.Q)) Debug.Log("Kast (Q) aktiveret");
         if (Input.GetKeyDown(KeyCode.Escape)) Debug.Log("Menu (ESC) open");
-        if (Input.GetKeyDown(KeyCode.F)) Debug.Log("Lommelygte (F) tændt/slukket");
-        if (Input.GetMouseButtonDown(1)) Debug.Log("Sigtning (Højreklik) aktiveret");
+        if (Input.GetKeyDown(KeyCode.F)) Debug.Log("Lommelygte (F) tÃ¦ndt/slukket");
+        if (Input.GetMouseButtonDown(1)) Debug.Log("Sigtning (HÃ¸jreklik) aktiveret");
         if (Input.GetMouseButtonDown(0)) Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -129,7 +129,7 @@ public class Movement : MonoBehaviour
             currentSpeed = baseSpeed;
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) Debug.Log("Næste weapon valgt");
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) Debug.Log("NÃ¦ste weapon valgt");
         if (Input.GetAxis("Mouse ScrollWheel") < 0f) Debug.Log("Forrige weapon valgt");
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) Debug.Log("Weapon 1 valgt");
