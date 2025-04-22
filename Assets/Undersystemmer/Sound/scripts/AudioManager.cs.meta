@@ -5,10 +5,17 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - musicSource: {instanceID: 0}
-  - dayMusic: {instanceID: 0}
+  - dayMusic: {fileID: 8300000, guid: 56841f4f49e11f043969ae419a3baf42, type: 3}
   - nightMusic: {instanceID: 0}
   - sfxSourcePrefab: {instanceID: 0}
   - finnRoamingSound: {fileID: 8300000, guid: 809dee1f03f3832418b3d047069b3499, type: 3}
+  - finnChasingSound: {instanceID: 0}
+  - finnAttackSound: {instanceID: 0}
+  - finnDeadSound: {instanceID: 0}
+  - BaseRoamingSound: {instanceID: 0}
+  - BaseChasingSound: {instanceID: 0}
+  - BaseAttackSound: {instanceID: 0}
+  - BaseDeadSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

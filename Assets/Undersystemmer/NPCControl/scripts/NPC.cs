@@ -63,6 +63,15 @@ public class NPC : MonoBehaviour
         {
             ViewAngle = 180;
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpCollider.radius = 5;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SpCollider.radius = 1;
+        }
     }
     public void TransitionToState(IState newState)
     {
