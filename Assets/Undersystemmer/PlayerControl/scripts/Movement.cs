@@ -1,17 +1,34 @@
-﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour
 {
+    [Header("StaminaSlideBar")]
+    [SerializeField] StaminaSystem staminaSystem;
+
+    [Header("Camera & Mouse")]
     [SerializeField] Transform playerCamera;
     [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
     [SerializeField] bool cursorLock = true;
     [SerializeField] float mouseSensitivity = 3.5f;
+
+    [Header("Movement")]
     [SerializeField] float baseSpeed = 6.0f;
     [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
     [SerializeField] float gravity = -30f;
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask ground;
     [SerializeField] float jumpHeight = 6f;
+
+    [Header("Headbob Settings")]
+    [SerializeField] float bobFrequency = 1.5f;
+    [SerializeField] float bobAmplitude = 0.05f;
+    [SerializeField] float bobSpeedMultiplier = 1.0f;
+
+    private Vector3 initialCameraLocalPos;
+    private float bobTimer;
 
     private float currentSpeed;
     private float velocityY;
@@ -31,15 +48,15 @@ public class Movement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         currentSpeed = baseSpeed;
-
+        initialCameraLocalPos = playerCamera.localPosition;
         UpdateCursorState();
     }
 
     void Update()
     {
         UpdateMouse();
+        CheckKeybinds(); // Make sure this is before UpdateMove()
         UpdateMove();
-        CheckKeybinds();
     }
 
     void UpdateMouse()
@@ -80,6 +97,8 @@ public class Movement : MonoBehaviour
         {
             velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+
+        ApplyHeadbob();
     }
 
     void CheckKeybinds()
@@ -130,13 +149,15 @@ public class Movement : MonoBehaviour
             Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        // Sprinting logic
+        if (Input.GetKey(KeyCode.LeftShift) && staminaSystem.HasStamina(1f) && currentDir.magnitude > 0.1f)
         {
-            currentSpeed = 10.0f;
+            currentSpeed = 10.0f; // Sprint speed
+            staminaSystem.UseStamina(Time.deltaTime * 20f); // Drain stamina per second
         }
         else
         {
-            currentSpeed = baseSpeed;
+            currentSpeed = baseSpeed; // Walking speed
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
@@ -167,6 +188,28 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             Debug.Log("Weapon 4 valgt");
+        }
+    }
+
+    void ApplyHeadbob()
+    {
+        if (isGrounded && currentDir.magnitude > 0.1f)
+        {
+            bobTimer += Time.deltaTime * bobFrequency * currentSpeed * bobSpeedMultiplier;
+
+            float bobY = Mathf.Sin(bobTimer) * bobAmplitude;
+            float bobX = Mathf.Cos(bobTimer * 2f) * bobAmplitude * 0.5f;
+            float bobZ = Mathf.Sin(bobTimer * 2f) * bobAmplitude * 0.2f;
+
+            float sprintMultiplier = currentSpeed > baseSpeed ? 1.5f : 1f;
+            Vector3 bobPosition = initialCameraLocalPos + new Vector3(bobX, bobY, bobZ) * sprintMultiplier;
+
+            playerCamera.localPosition = bobPosition;
+        }
+        else
+        {
+            playerCamera.localPosition = Vector3.Lerp(playerCamera.localPosition, initialCameraLocalPos, Time.deltaTime * 5f);
+            bobTimer = 0f;
         }
     }
 
