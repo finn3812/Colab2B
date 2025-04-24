@@ -320,6 +320,105 @@ Transform:
   m_Children: []
   m_Father: {fileID: 882250515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &121506063 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6777346260922699139, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 274725686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &274725686
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3231713351665165364, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: dayMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 56841f4f49e11f043969ae419a3baf42, type: 3}
+    - target: {fileID: 3231713351665165364, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: nightMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 4e42495a108306248a1fa5d00d94f24d, type: 3}
+    - target: {fileID: 3231713351665165364, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: sfxSourcePrefab
+      value: 
+      objectReference: {fileID: 121506063}
+    - target: {fileID: 3231713351665165364, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: finnChasingSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1b28ce07744410f4e9850f2243aac717, type: 3}
+    - target: {fileID: 6777346260922699139, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7374079809314769068, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 516.641
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 243.75455
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -561.33136
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060355410232424903, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d0d7221c7d8a7e34380d71d3ad3bb3ad, type: 3}
 --- !u!1 &426772228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,3 +1356,4 @@ SceneRoots:
   - {fileID: 677455271}
   - {fileID: 54755660}
   - {fileID: 1088471304}
+  - {fileID: 274725686}
