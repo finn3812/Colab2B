@@ -161,6 +161,7 @@ public class Movement : MonoBehaviour
         else
         {
             currentSpeed = baseSpeed; // Walking speed
+            IsSprint = false;
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
