@@ -119,6 +119,6 @@ public class NPC : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (tag)
+     
     }
 }
