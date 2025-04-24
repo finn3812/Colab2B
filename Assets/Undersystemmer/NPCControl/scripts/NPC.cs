@@ -107,11 +107,18 @@ public class NPC : MonoBehaviour
     virtual public bool CanHearPlayer()
     {
         SpCollider.radius = 5;
+        if (player)
+        {
+
+        }
         return false;
     }
     virtual public bool IsPlayerInAttackRange()
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
     }
-
+    public void OnTriggerEnter(Collider other)
+    {
+        if (tag)
+    }
 }
