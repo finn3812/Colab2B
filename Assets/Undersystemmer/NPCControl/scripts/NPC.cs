@@ -15,7 +15,7 @@ public interface IState
 public class NPC : MonoBehaviour
 {
     public Transform player;
-    private IState currentState;
+    public IState currentState;
     public float WalkSpeed;
     public float RunSpeed;
     public Transform[] WayPoints;
@@ -53,7 +53,7 @@ public class NPC : MonoBehaviour
         TransitionToState(new Idle(this));
     }
 
-    public void Update()
+    virtual public void Update()
     {
         currentState.Update();
         Debug.Log(currentState.ToString());
@@ -75,7 +75,7 @@ public class NPC : MonoBehaviour
             SpCollider.radius = 1;
         }
     }
-    public void TransitionToState(IState newState)
+    virtual public void TransitionToState(IState newState)
     {
         if (currentState != null)
         {
@@ -84,7 +84,7 @@ public class NPC : MonoBehaviour
         currentState = newState;
         currentState.Enter();
     }
-    public bool CanSeePlayer()
+   virtual public bool CanSeePlayer()
     {
         Vector3 directionToPlayer = player.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
@@ -104,12 +104,12 @@ public class NPC : MonoBehaviour
         }
         return false;
     }
-    public bool CanHearPlayer()
+    virtual public bool CanHearPlayer()
     {
         SpCollider.radius = 5;
         return false;
     }
-    public bool IsPlayerInAttackRange()
+    virtual public bool IsPlayerInAttackRange()
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
     }
