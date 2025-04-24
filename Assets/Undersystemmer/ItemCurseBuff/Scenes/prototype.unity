@@ -753,8 +753,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8729812441835091013, guid: 5b2691a8f9fe1114e88498ebf7907038,
         type: 3}
+      propertyPath: gravity
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729812441835091013, guid: 5b2691a8f9fe1114e88498ebf7907038,
+        type: 3}
       propertyPath: ground.m_Bits
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8729812441835091013, guid: 5b2691a8f9fe1114e88498ebf7907038,
+        type: 3}
+      propertyPath: sprintSpeedMultiplier
+      value: 1.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -868,7 +878,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5244, y: 1, z: 2.5146}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -905,12 +915,13 @@ MonoBehaviour:
   SpinWheelImg: {fileID: 489682248}
   SpinWheelData: {fileID: 11400000, guid: 6f710d1355117044dbc0a6a66ad32fb2, type: 2}
   SpinBtn: {fileID: 372891398}
-  FingerSpinWheel: {fileID: 1265045173}
   SpinCanvas: {fileID: 502885602}
-  AffectedObject: {fileID: 747302011}
   StatsText: {fileID: 226235218}
   GamblingMeterUI: {fileID: 1269378943}
   playerMovement: {fileID: 1620813170}
+  AffectedObject: {fileID: 747302011}
+  wheelchairSpeed: 2
+  wheelchairHeight: 1.2
 --- !u!4 &884802128
 Transform:
   m_ObjectHideFlags: 0
