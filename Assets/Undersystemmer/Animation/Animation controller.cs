@@ -16,9 +16,9 @@ public class Anim : MonoBehaviour
 
     public void setAnimation(Animtype State)
     {
-        switch (State)
+        //switch (State)
         {
-            case Animtype.Idle:
+            //case Animtype.Idle:
                 
         }
     }
