@@ -15,7 +15,7 @@ public interface IState
 public class NPC : MonoBehaviour
 {
     public Transform player;
-    private IState currentState;
+    public IState currentState;
     public float WalkSpeed;
     public float RunSpeed;
     public Transform[] WayPoints;
