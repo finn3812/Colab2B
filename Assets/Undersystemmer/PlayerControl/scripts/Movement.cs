@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,7 @@ public class Movement : MonoBehaviour
     Vector2 currentDirVelocity;
 
     private bool isTabletOpen = false;
+    public bool IsSprint = false;
 
     void Start()
     {
@@ -154,10 +156,12 @@ public class Movement : MonoBehaviour
         {
             currentSpeed = 10.0f; // Sprint speed
             staminaSystem.UseStamina(Time.deltaTime * 20f); // Drain stamina per second
+            IsSprint = true;
         }
         else
         {
             currentSpeed = baseSpeed; // Walking speed
+            IsSprint = false;
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
