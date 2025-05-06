@@ -7,6 +7,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     // --- Inspector Fields --- (Uændret sektion)
+    // BASE Fucks Small KIDS
     [Header("Dependencies")]
     [SerializeField] StaminaSystem staminaSystem;
     [Header("Camera & Mouse Settings")]
