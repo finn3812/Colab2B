@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class Movement : MonoBehaviour
 {
-    // --- Inspector Fields --- (Uændret sektion)
+    // --- Inspector Fields --- (Uændret sektion) 
+    // BASE IS GAY //
     [Header("Dependencies")]
     [SerializeField] StaminaSystem staminaSystem;
     [Header("Camera & Mouse Settings")]
