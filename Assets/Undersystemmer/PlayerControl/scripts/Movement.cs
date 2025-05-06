@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using JetBrains.Annotations; // If you're not using JetBrains Rider/ReSharper specific annotations, this might be removable.
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class Movement : MonoBehaviour
 {
-<<<<<<< HEAD
-    // --- Inspector Fields --- (Uændret sektion)
-    // BASE Fucks Small KIDS
-=======
-    // --- Inspector Fields --- (Uændret sektion) 
-    // BASE IS GAY //
->>>>>>> 3b364e00f5af5767b2f3a7fc9d820a640397ef1f
+    // --- Inspector Fields ---
     [Header("Dependencies")]
     [SerializeField] StaminaSystem staminaSystem;
     [Header("Camera & Mouse Settings")]
@@ -21,7 +15,7 @@ public class Movement : MonoBehaviour
     [SerializeField] bool cursorLock = true;
     [SerializeField] float mouseSensitivity = 3.5f;
     [Header("Movement Settings")]
-    [SerializeField] float baseSpeed = 6.0f; // Bruges KUN som startværdi nu
+    [SerializeField] float baseSpeed = 6.0f; // Used as the initial value for currentBaseSpeed
     [SerializeField] float sprintSpeedMultiplier = 1.6f;
     [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
     [SerializeField] float gravity = -30f;
@@ -37,27 +31,25 @@ public class Movement : MonoBehaviour
     [SerializeField] float bobAmplitude = 0.05f;
     [SerializeField] Transform headbobTarget;
 
-    // --- Interne Runtime Variabler ---
-    private float currentBaseSpeed; // Den *faktiske aktuelle* grundhastighed (styres udefra)
-    private float currentSpeed; // Hastighed lige nu (gå, sprint eller wheelchair speed)
+    // --- Internal Runtime Variables ---
+    private float currentBaseSpeed; // The *actual current* base speed (can be changed externally)
+    private float currentSpeed;     // Speed right now (walk, sprint, or other modified speed)
     private CharacterController controller;
     private float velocityY;
     private bool isGrounded;
 
-    // NYE: Til højde/center gendannelse
+    // For height/center restoration
     private float originalHeight;
     private Vector3 originalCenter;
 
-    // Kamera/Mus
+    // Camera/Mouse
     private float cameraCap;
     private Vector2 currentMouseDelta;
     private Vector2 currentMouseDeltaVelocity;
 
+    public bool IsSprint { get; private set; } = false; // Read-only from outside, set internally
 
-    private bool isTabletOpen = false;
-    public bool IsSprint = false;
-
-    // Bevægelse
+    // Movement input
     private Vector2 currentDir;
     private Vector2 currentDirVelocity;
 
@@ -68,22 +60,20 @@ public class Movement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        if (!controller) Debug.LogError("FATAL: Movement script mangler CharacterController!", this.gameObject);
-        // ... (andre null tjek for camera, groundCheck etc.) ...
-        if (playerCamera == null) Debug.LogError("FEJL: playerCamera er ikke tildelt!", this.gameObject);
-        if (groundCheck == null) Debug.LogError("FEJL: groundCheck Transform er ikke tildelt!", this.gameObject);
+        if (!controller) Debug.LogError("FATAL: Movement script requires a CharacterController component!", this.gameObject);
+        if (playerCamera == null) Debug.LogError("ERROR: playerCamera is not assigned!", this.gameObject);
+        if (groundCheck == null) Debug.LogError("ERROR: groundCheck Transform is not assigned!", this.gameObject);
+        if (staminaSystem == null) Debug.LogWarning("Movement: StaminaSystem is not assigned. Sprinting might not work as expected regarding stamina.", this.gameObject);
 
 
-        currentBaseSpeed = baseSpeed; // Initialiser med Inspector værdien
+        currentBaseSpeed = baseSpeed; // Initialize with the Inspector value
         currentSpeed = currentBaseSpeed;
 
-        // --- NYT: Gem original højde og center ---
         originalHeight = controller.height;
         originalCenter = controller.center;
         Debug.Log($"Movement Start: Initial base speed={currentBaseSpeed:F1}, Original Height={originalHeight:F1}, Original Center={originalCenter}");
 
-        // Headbob setup
-        if (headbobTarget == null) headbobTarget = playerCamera;
+        if (headbobTarget == null && playerCamera != null) headbobTarget = playerCamera; // Default to playerCamera if not set
         if (headbobTarget) initialHeadbobTargetLocalPos = headbobTarget.localPosition;
 
         UpdateCursorState();
@@ -91,27 +81,30 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        // AFGØRENDE TJEK: Gør intet hvis scriptet er deaktiveret
         if (!this.enabled)
         {
-            currentDir = Vector2.zero; currentDirVelocity = Vector2.zero; return;
+            // Reset movement input if script is disabled to prevent sliding
+            currentDir = Vector2.zero;
+            currentDirVelocity = Vector2.zero;
+            return;
         }
 
         HandleGroundCheck();
         HandleMouseLook();
-        HandleMovementInput();
+        HandleMovementInputAndSprint(); // Combined input and sprint logic
         HandleGravityAndJump();
-        ApplyMovement();
+        ApplyMovement(); // Single CharacterController.Move call
         if (enableHeadbob) ApplyHeadbob();
         HandleOtherKeybinds();
     }
 
-    // --- Update Opdelte Funktioner --- (Stort set uændrede, men bruger currentBaseSpeed)
-
-    void HandleGroundCheck() { isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer); }
+    void HandleGroundCheck()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+    }
 
     void HandleMouseLook()
-    { /* ... uændret ... */
+    {
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -123,188 +116,139 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void HandleMovementInput()
-    { /* ... uændret logik, bruger nu currentBaseSpeed ... */
+    void HandleMovementInputAndSprint()
+    {
         Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         targetDir.Normalize();
         currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
 
+        // Determine if player wants to sprint and can sprint
+        bool wantsToSprint = Input.GetKey(KeyCode.LeftShift);
+        bool isMovingEnough = currentDir.magnitude > 0.1f;
+        bool hasEnoughStamina = staminaSystem != null ? staminaSystem.HasStamina(staminaDrainPerSecond * Time.deltaTime) : true; // Check for enough stamina for this frame, or assume true if no stamina system
+
+        if (wantsToSprint && isGrounded && isMovingEnough && hasEnoughStamina && currentBaseSpeed > 0.1f)
+        {
+            currentSpeed = currentBaseSpeed * sprintSpeedMultiplier;
+            staminaSystem?.UseStamina(staminaDrainPerSecond * Time.deltaTime);
+            IsSprint = true;
+        }
+        else
+        {
+            currentSpeed = currentBaseSpeed; // Use current base speed (could be walking or modified e.g. wheelchair)
+            IsSprint = false;
+        }
+    }
+
+    void HandleGravityAndJump()
+    {
         if (isGrounded && velocityY < 0)
         {
-            velocityY = -2f;
+            velocityY = -2f; // A small negative value to keep the controller grounded
         }
 
-        velocityY += gravity * Time.deltaTime;
-
-        Vector3 moveVelocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * currentSpeed;
-        moveVelocity.y = velocityY;
-
-        controller.Move(moveVelocity * Time.deltaTime);
-
-        // Sprint KUN hvis vi kan, vil, bevæger os, er på jorden OG base speed er over et lille threshold (ikke 0)
-        if (wantsToSprint && isGrounded && isMovingEnough && canSprint && currentBaseSpeed > 0.1f)
-        {
-            currentSpeed = currentBaseSpeed * sprintSpeedMultiplier;
-            staminaSystem?.UseStamina(staminaDrainPerSecond * Time.deltaTime);
-        }
-        else
-        {
-            currentSpeed = currentBaseSpeed; // Ellers brug den aktuelle base speed (som kan være wheelchair speed)
-        }
-    }
-
-    void HandleGravityAndJump()
-    { /* ... uændret, men hop tjekker allerede base speed > 0 ... */
-        if (isGrounded && velocityY < 0) velocityY = -2f;
-
-        // Tjek for hop input - kræver at man er på jorden og IKKE har base speed 0 (eller meget lav)
+        // Jump input - requires being grounded and not having a zero (or very low) base speed
         if (isGrounded && Input.GetButtonDown("Jump") && currentBaseSpeed > 0.1f)
         {
             velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        velocityY += gravity * Time.deltaTime;
+        velocityY += gravity * Time.deltaTime; // Apply gravity continuously
     }
 
     void ApplyMovement()
-    { /* ... uændret ... */
+    {
+        if (controller == null) return;
+
         Vector3 horizontalVelocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * currentSpeed;
         Vector3 finalVelocity = horizontalVelocity;
-        finalVelocity.y = velocityY;
-        controller?.Move(finalVelocity * Time.deltaTime);
+        finalVelocity.y = velocityY; // Add vertical velocity (gravity/jump)
+
+        controller.Move(finalVelocity * Time.deltaTime); // The single CharacterController.Move call per frame
     }
 
     void ApplyHeadbob()
     {
         if (!headbobTarget || controller == null) return;
 
-        // Tjek om vi skal bobbe
-        // Undgå division med nul hvis currentBaseSpeed er meget lav (wheelchair)
+        // Check if conditions for headbobbing are met
         bool canBob = isGrounded && controller.velocity.magnitude > 0.1f && currentSpeed > 0.1f && currentBaseSpeed > 0.1f;
 
         if (canBob)
         {
-            // Beregn bob timer med skalering ift. base speed
-            bobTimer += Time.deltaTime * bobFrequency * (currentSpeed / currentBaseSpeed);
+            // Calculate bob timer, scaling with speed ratio (sprint makes bob faster)
+            // Ensure currentBaseSpeed is not zero to avoid division by zero error
+            float speedRatio = (currentBaseSpeed > 0.01f) ? (currentSpeed / currentBaseSpeed) : 1.0f;
+            bobTimer += Time.deltaTime * bobFrequency * speedRatio;
+
             float bobY = Mathf.Sin(bobTimer) * bobAmplitude;
-            float bobX = Mathf.Cos(bobTimer * 0.5f) * bobAmplitude * 0.5f;
+            float bobX = Mathf.Cos(bobTimer * 0.5f) * bobAmplitude * 0.5f; // Horizontal bob can be half frequency and amplitude
             Vector3 bobOffset = new Vector3(bobX, bobY, 0f);
-            headbobTarget.localPosition = Vector3.Lerp(headbobTarget.localPosition, initialHeadbobTargetLocalPos + bobOffset, Time.deltaTime * 10f);
-        }
 
-        // Sprinting logic
-        if (Input.GetKey(KeyCode.LeftShift) && staminaSystem.HasStamina(1f) && currentDir.magnitude > 0.1f)
-        {
-            currentSpeed = 10.0f; // Sprint speed
-            staminaSystem.UseStamina(Time.deltaTime * 20f); // Drain stamina per second
-            IsSprint = true;
-
-            currentSpeed = currentBaseSpeed * sprintSpeedMultiplier;
-            staminaSystem?.UseStamina(staminaDrainPerSecond * Time.deltaTime);
-        }
-        else
-        {
-
-            currentSpeed = baseSpeed; // Walking speed
-            IsSprint = false;
-
-            currentSpeed = currentBaseSpeed; // Ellers brug den aktuelle base speed (som kan være wheelchair speed)
-
-        }
-    }
-
-    void HandleGravityAndJump()
-    { /* ... uændret, men hop tjekker allerede base speed > 0 ... */
-        if (isGrounded && velocityY < 0) velocityY = -2f;
-
-        // Tjek for hop input - kræver at man er på jorden og IKKE har base speed 0 (eller meget lav)
-        if (isGrounded && Input.GetButtonDown("Jump") && currentBaseSpeed > 0.1f)
-        {
-            velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-        velocityY += gravity * Time.deltaTime;
-    }
-
-    void ApplyMovement()
-    { /* ... uændret ... */
-        Vector3 horizontalVelocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * currentSpeed;
-        Vector3 finalVelocity = horizontalVelocity;
-        finalVelocity.y = velocityY;
-        controller?.Move(finalVelocity * Time.deltaTime);
-    }
-
-    void ApplyHeadbob()
-    {
-        if (!headbobTarget || controller == null) return;
-
-        // Tjek om vi skal bobbe
-        // Undgå division med nul hvis currentBaseSpeed er meget lav (wheelchair)
-        bool canBob = isGrounded && controller.velocity.magnitude > 0.1f && currentSpeed > 0.1f && currentBaseSpeed > 0.1f;
-
-        if (canBob)
-        {
-            // Beregn bob timer med skalering ift. base speed
-            bobTimer += Time.deltaTime * bobFrequency * (currentSpeed / currentBaseSpeed);
-            float bobY = Mathf.Sin(bobTimer) * bobAmplitude;
-            float bobX = Mathf.Cos(bobTimer * 0.5f) * bobAmplitude * 0.5f;
-            Vector3 bobOffset = new Vector3(bobX, bobY, 0f);
             headbobTarget.localPosition = Vector3.Lerp(headbobTarget.localPosition, initialHeadbobTargetLocalPos + bobOffset, Time.deltaTime * 10f);
         }
         else
         {
-            // Gå tilbage til neutral position
-            bobTimer = 0f;
+            // Return to neutral position when not bobbing
+            bobTimer = 0f; // Reset timer to avoid abrupt jump if bobbing resumes
             headbobTarget.localPosition = Vector3.Lerp(headbobTarget.localPosition, initialHeadbobTargetLocalPos, Time.deltaTime * 5f);
         }
     }
 
     void HandleOtherKeybinds()
-    { /* ... uændret ... */
-        // 'E' håndteres af SpinWheelController
-        if (Input.GetKeyDown(KeyCode.R)) Debug.Log("Reload (R) aktiveret");
-        // ... (resten af tasterne) ...
+    {
+        // Example: 'E' might be handled by another script like SpinWheelController
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Reload (R) activated");
+            // Add reload logic here if needed
+        }
+        // ... other keybinds ...
     }
 
-
-    // -----===== PUBLIC METODER TIL STYRING UDEFRA =====-----
+    // -----===== PUBLIC METHODS FOR EXTERNAL CONTROL =====-----
 
     public void UpdateCursorState()
-    { /* ... uændret ... */
-        if (cursorLock && this.enabled) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; }
-        else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
+    {
+        if (cursorLock && this.enabled)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
-    // Sætter den AKTUELLE grundhastighed
+    // Sets the CURRENT base speed (e.g., for walking, or for wheelchair mode)
     public void SetSpeed(float newBaseSpeed)
     {
-        currentBaseSpeed = Mathf.Max(0, newBaseSpeed);
-        // Opdater straks 'currentSpeed' hvis vi ikke sprinter
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isGrounded && currentDir.magnitude > 0.1f;
-        if (!isSprinting) { currentSpeed = currentBaseSpeed; }
+        currentBaseSpeed = Mathf.Max(0, newBaseSpeed); // Ensure speed is not negative
+        // If not currently trying to sprint, update currentSpeed immediately.
+        // If sprinting, currentSpeed will be updated in HandleMovementInputAndSprint.
+        if (!IsSprint)
+        {
+            currentSpeed = currentBaseSpeed;
+        }
         Debug.Log($"Movement - Base speed set to: {currentBaseSpeed:F1}");
     }
 
-    // Returnerer den AKTUELLE grundhastighed
     public float GetBaseSpeed() { return currentBaseSpeed; }
+    public float GetCurrentActualSpeed() { return currentSpeed; } // Speed including sprint/modifiers
 
-    // Returnerer hastigheden LIGE NU
-    public float GetCurrentActualSpeed() { return currentSpeed; }
+    // --- NEW METHODS FOR HEIGHT/CENTER ADJUSTMENT ---
 
-    // --- NYE METODER TIL HØJDE/CENTER ---
-
-    // Sætter CharacterController højde og justerer center automatisk
     public void SetCharacterHeightAndCenter(float newHeight)
     {
         if (controller == null) return;
-        // Undgå negativ eller meget lille højde
-        newHeight = Mathf.Max(0.1f, newHeight);
-        // Juster controller højde
+        newHeight = Mathf.Max(0.1f, newHeight); // Prevent zero or negative height
         controller.height = newHeight;
-        // Juster center position (typisk halvdelen af højden op fra bunden)
-        controller.center = new Vector3(originalCenter.x, newHeight / 2f, originalCenter.z); // Brug original X/Z
+        // Adjust center typically to half the height, maintaining original X/Z offset
+        controller.center = new Vector3(originalCenter.x, newHeight / 2f, originalCenter.z);
         Debug.Log($"Movement - Height set to {controller.height:F1}, Center set to {controller.center}");
     }
 
-    // Gendanner den originale højde og center position gemt i Start()
     public void RestoreOriginalHeightAndCenter()
     {
         if (controller == null) return;
@@ -313,10 +257,8 @@ public class Movement : MonoBehaviour
         Debug.Log($"Movement - Restored Original Height ({originalHeight:F1}) and Center ({originalCenter})");
     }
 
-    // Returnerer den gemte originalhøjde (nyttig for debug eller UI)
     public float GetOriginalHeight()
     {
         return originalHeight;
     }
-
-} // End of Movement class
+}
