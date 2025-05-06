@@ -43,6 +43,11 @@ public class Currency : MonoBehaviour
         GuldMængde.text = Penge + " Guld";
     }
     // Update is called once per frame
+
+    public void KøbItem()
+    {
+      
+    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.G))
