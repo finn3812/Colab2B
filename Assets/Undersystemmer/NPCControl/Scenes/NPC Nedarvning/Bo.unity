@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 519837795}
   - component: {fileID: 519837799}
   - component: {fileID: 519837794}
+  - component: {fileID: 519837800}
   m_Layer: 0
   m_Name: NPC test
   m_TagString: Untagged
@@ -516,6 +517,27 @@ MonoBehaviour:
   lastKnownPosition: {x: 0, y: 0, z: 0}
   agent: {fileID: 519837794}
   Health: 0
+--- !u!135 &519837800
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519837787}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &677455267
 GameObject:
   m_ObjectHideFlags: 0

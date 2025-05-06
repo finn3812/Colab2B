@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -46,6 +47,7 @@ public class Movement : MonoBehaviour
     private Vector2 currentMouseDelta;
     private Vector2 currentMouseDeltaVelocity;
 
+
     // Bevægelse
     private Vector2 currentDir;
     private Vector2 currentDirVelocity;
@@ -53,6 +55,10 @@ public class Movement : MonoBehaviour
     // Headbob
     private Vector3 initialHeadbobTargetLocalPos;
     private float bobTimer;
+
+    private bool isTabletOpen = false;
+    public bool IsSprint = false;
+
 
     void Start()
     {
@@ -125,12 +131,92 @@ public class Movement : MonoBehaviour
         // Sprint KUN hvis vi kan, vil, bevæger os, er på jorden OG base speed er over et lille threshold (ikke 0)
         if (wantsToSprint && isGrounded && isMovingEnough && canSprint && currentBaseSpeed > 0.1f)
         {
+
             currentSpeed = currentBaseSpeed * sprintSpeedMultiplier;
             staminaSystem?.UseStamina(staminaDrainPerSecond * Time.deltaTime);
         }
         else
         {
             currentSpeed = currentBaseSpeed; // Ellers brug den aktuelle base speed (som kan være wheelchair speed)
+
+            velocityY = -2f;
+        }
+
+        velocityY += gravity * Time.deltaTime;
+
+        Vector3 moveVelocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * currentSpeed;
+        moveVelocity.y = velocityY;
+
+        controller.Move(moveVelocity * Time.deltaTime);
+
+        if (isGrounded && Input.GetButtonDown("Jump"))
+        {
+            velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+
+        ApplyHeadbob();
+    }
+
+    void CheckKeybinds()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Brug (E) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Reload (R) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Drop (G) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("Kast (Q) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Menu (ESC) open");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("Lommelygte (F) tændt/slukket");
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Sigtning (Højreklik) aktiveret");
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            isTabletOpen = !isTabletOpen;
+            Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
+        }
+
+        // Sprinting logic
+        if (Input.GetKey(KeyCode.LeftShift) && staminaSystem.HasStamina(1f) && currentDir.magnitude > 0.1f)
+        {
+            currentSpeed = 10.0f; // Sprint speed
+            staminaSystem.UseStamina(Time.deltaTime * 20f); // Drain stamina per second
+            IsSprint = true;
+        }
+        else
+        {
+            currentSpeed = baseSpeed; // Walking speed
+            IsSprint = false;
+
         }
     }
 
