@@ -58,7 +58,6 @@ public class Movement : MonoBehaviour
     // Headbob
     private Vector3 initialHeadbobTargetLocalPos;
     private float bobTimer;
->>>>>>> 900fbf07cba1b7fb36864178212de2d2d67a7f24
 
     void Start()
     {
@@ -124,14 +123,8 @@ public class Movement : MonoBehaviour
         targetDir.Normalize();
         currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
 
-        bool canSprint = staminaSystem == null || staminaSystem.HasStamina(0.1f);
-        bool wantsToSprint = Input.GetKey(KeyCode.LeftShift);
-        bool isMovingEnough = currentDir.magnitude > 0.1f;
-
-        // Sprint KUN hvis vi kan, vil, bevæger os, er på jorden OG base speed er over et lille threshold (ikke 0)
-        if (wantsToSprint && isGrounded && isMovingEnough && canSprint && currentBaseSpeed > 0.1f)
+        if (isGrounded && velocityY < 0)
         {
-<<<<<<< HEAD
             velocityY = -2f;
         }
 
@@ -142,60 +135,54 @@ public class Movement : MonoBehaviour
 
         controller.Move(moveVelocity * Time.deltaTime);
 
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        // Sprint KUN hvis vi kan, vil, bevæger os, er på jorden OG base speed er over et lille threshold (ikke 0)
+        if (wantsToSprint && isGrounded && isMovingEnough && canSprint && currentBaseSpeed > 0.1f)
+        {
+            currentSpeed = currentBaseSpeed * sprintSpeedMultiplier;
+            staminaSystem?.UseStamina(staminaDrainPerSecond * Time.deltaTime);
+        }
+        else
+        {
+            currentSpeed = currentBaseSpeed; // Ellers brug den aktuelle base speed (som kan være wheelchair speed)
+        }
+    }
+
+    void HandleGravityAndJump()
+    { /* ... uændret, men hop tjekker allerede base speed > 0 ... */
+        if (isGrounded && velocityY < 0) velocityY = -2f;
+
+        // Tjek for hop input - kræver at man er på jorden og IKKE har base speed 0 (eller meget lav)
+        if (isGrounded && Input.GetButtonDown("Jump") && currentBaseSpeed > 0.1f)
         {
             velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
-        ApplyHeadbob();
+        velocityY += gravity * Time.deltaTime;
     }
 
-    void CheckKeybinds()
+    void ApplyMovement()
+    { /* ... uændret ... */
+        Vector3 horizontalVelocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * currentSpeed;
+        Vector3 finalVelocity = horizontalVelocity;
+        finalVelocity.y = velocityY;
+        controller?.Move(finalVelocity * Time.deltaTime);
+    }
+
+    void ApplyHeadbob()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Brug (E) aktiveret");
-        }
+        if (!headbobTarget || controller == null) return;
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("Reload (R) aktiveret");
-        }
+        // Tjek om vi skal bobbe
+        // Undgå division med nul hvis currentBaseSpeed er meget lav (wheelchair)
+        bool canBob = isGrounded && controller.velocity.magnitude > 0.1f && currentSpeed > 0.1f && currentBaseSpeed > 0.1f;
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (canBob)
         {
-            Debug.Log("Drop (G) aktiveret");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("Kast (Q) aktiveret");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("Menu (ESC) open");
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("Lommelygte (F) tændt/slukket");
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log("Sigtning (Højreklik) aktiveret");
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Skyd/Melee (Venstreklik) aktiveret");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            isTabletOpen = !isTabletOpen;
-            Debug.Log(isTabletOpen ? "Tablet/iPad open" : "Tablet/iPad lukket");
+            // Beregn bob timer med skalering ift. base speed
+            bobTimer += Time.deltaTime * bobFrequency * (currentSpeed / currentBaseSpeed);
+            float bobY = Mathf.Sin(bobTimer) * bobAmplitude;
+            float bobX = Mathf.Cos(bobTimer * 0.5f) * bobAmplitude * 0.5f;
+            Vector3 bobOffset = new Vector3(bobX, bobY, 0f);
+            headbobTarget.localPosition = Vector3.Lerp(headbobTarget.localPosition, initialHeadbobTargetLocalPos + bobOffset, Time.deltaTime * 10f);
         }
 
         // Sprinting logic
