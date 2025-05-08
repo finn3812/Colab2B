@@ -32,13 +32,14 @@ public class NPC : MonoBehaviour
     public NavMeshAgent agent;
     public int Health;
     SphereCollider SpCollider;
+    public Movement movementScript;
 
 
-
-
-    private void Start()
+    public void Start()
     {
+        movementScript = player.GetComponent<Movement>();
         SpCollider = transform.GetComponent<SphereCollider>();
+
         // Get the agent component FIRST
         agent = GetComponent<NavMeshAgent>();
         
@@ -51,10 +52,15 @@ public class NPC : MonoBehaviour
 
         // THEN transition to the initial state
         TransitionToState(new Idle(this));
+
     }
 
-    virtual public void Update()
+   virtual public void Update()
     {
+        CanHearPlayer();
+        
+        Debug.Log(movementScript.IsSprint);
+
         currentState.Update();
         Debug.Log(currentState.ToString());
         if (currentState.ToString() == "Chase")
@@ -66,14 +72,6 @@ public class NPC : MonoBehaviour
             ViewAngle = 180;
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SpCollider.radius = 5;
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            SpCollider.radius = 1;
-        }
     }
     virtual public void TransitionToState(IState newState)
     {
@@ -104,27 +102,48 @@ public class NPC : MonoBehaviour
         }
         return false;
     }
-    virtual public bool CanHearPlayer()
+    virtual public void CanHearPlayer()
     {
-        SpCollider.radius = 5;
-        Movement movementScript = player.GetComponent<Movement>();
         if (movementScript != null && movementScript.IsSprint)
         {
-            if (movementScript.IsSprint == true)
-            {
-                SpCollider.radius = 10;
-            } else {
-                return false;
-            }
+            SpCollider.radius = 100;
+            Debug.Log("Can hear player, radius set to 100");
         }
-        return false;
+        else if (movementScript.IsSprint ==false)
+        {
+            SpCollider.radius = 0;
+            Debug.Log("Cannot hear player, radius set to 0");
+        }
     }
+
+
     virtual public bool IsPlayerInAttackRange()
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
     }
     public void OnTriggerEnter(Collider other)
     {
-     
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player entered trigger zone!");
+
+            
+            if (!(currentState is Chase))
+            {
+                TransitionToState(new Chase(this));
+            }
+        }
+    }
+        public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player exited trigger zone.");
+
+            if (currentState is Chase)
+            {
+                TransitionToState(new Suspicious(this));
+            }
+        }
     }
 }

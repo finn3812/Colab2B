@@ -33,14 +33,14 @@ public class Chase : IState
             npc.TransitionToState(new Suspicious(npc));
         }
 
-        if (npc.name == "NPC test")
+       /* if (npc.name == "NPC test")
             AudioManager.Instance.PlaySound3D(AudioManager.Instance.finnChasingSound, npc.transform.position, 1f, 15f);
-
+       */
     }
 
     public void Exit()
     {
-        Debug.Log("NPC forlader Idle-tilstand");
+       //Debug.Log("NPC forlader Idle-tilstand");
     }
 
 }

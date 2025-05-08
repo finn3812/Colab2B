@@ -11,8 +11,4 @@ public class BaseNedarvning : NPC
         ViewAngle = 360;
         ViewDistance = 5; // ik ret langt han er vant til se en skærm der ikke er ret langt væk
     }
-    public override bool CanHearPlayer()
-    {
-        return false;
-    }
 }
