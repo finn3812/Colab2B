@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class Movement : MonoBehaviour
 {
-    // sebastian commit
+    // sebastian commit 
     // --- Inspector Fields ---
     [Header("Dependencies")]
     [SerializeField] StaminaSystem staminaSystem;
