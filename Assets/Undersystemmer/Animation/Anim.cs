@@ -23,10 +23,10 @@ public class Anim : MonoBehaviour
 
     void Update()
     {
-        HandleState();
+        
     }
 
-    void HandleState()
+    public void HandleState(states currentState)
     {
         switch (currentState)
         {
