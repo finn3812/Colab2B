@@ -33,10 +33,10 @@ public class Currency : MonoBehaviour
 
     public void SamlMønt()
     {
-        MønteMængde = Random.Range(1, 17);
+        MønteMængde = Random.Range(1, 20);
         Penge = Penge + MønteMængde;
         GetMoney();
-        Debug.Log("Dødspengene er " + MønteMængde);
+        Debug.Log("Penge samlede op er " + MønteMængde);
     }
     public void GetMoney()
     {
@@ -44,10 +44,7 @@ public class Currency : MonoBehaviour
     }
     // Update is called once per frame
 
-    public void KøbItem()
-    {
-      
-    }
+    
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.G))

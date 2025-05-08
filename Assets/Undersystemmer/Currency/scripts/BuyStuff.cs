@@ -7,6 +7,7 @@ using TMPro;
 
 public class BuyStuff : MonoBehaviour
 {
+    private bool isShopOpen = false;
     public int ItemValue;
     public KeyCode BuyKey = KeyCode.E;
     public float Buyradius = 4f;
@@ -16,11 +17,14 @@ public class BuyStuff : MonoBehaviour
     public UnityEngine.UI.Button Rundstykker;
     public UnityEngine.UI.Button Batterier;
     public UnityEngine.UI.Button Exit;
+    public Movement playerMovement;
 
     // Start is called before the first frame update
     void Start()
     {
         Currency.instance.Penge = 10;
+        
+        Shop.SetActive(false);
     }
 
 
@@ -28,10 +32,26 @@ public class BuyStuff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Currency.instance.GetMoney();
         float distance = Vector3.Distance(Player.position, transform.position);
         if (Input.GetKeyDown(BuyKey) && distance <= Buyradius)
-        { 
+        {
+            isShopOpen = !isShopOpen;
           Shop.SetActive(true);
+            if (isShopOpen)
+            {
+                if (playerMovement != null) playerMovement.enabled = false;
+                UnityEngine.Cursor.lockState = CursorLockMode.None; UnityEngine.Cursor.visible = true;
+            }
+            else
+            {
+                if (playerMovement != null)
+                {
+                    playerMovement.enabled = true;
+                    playerMovement.UpdateCursorState();
+                }
+                else { /* Fallback cursor lock */ UnityEngine.Cursor.lockState = CursorLockMode.Locked; UnityEngine.Cursor.visible = false; }
+            }
         }
     }
 
@@ -87,6 +107,13 @@ public class BuyStuff : MonoBehaviour
     public void ShopExit()
     {
         Shop.SetActive(false);
+        isShopOpen = false;
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+            playerMovement.UpdateCursorState();
+        }
+        else { /* Fallback cursor lock */ UnityEngine.Cursor.lockState = CursorLockMode.Locked; UnityEngine.Cursor.visible = false; }
     }
 }//Currency.instance.Penge >= ItemValue 
 
