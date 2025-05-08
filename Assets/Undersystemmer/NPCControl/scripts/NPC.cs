@@ -107,15 +107,9 @@ public class NPC : MonoBehaviour
     virtual public bool CanHearPlayer()
     {
         SpCollider.radius = 5;
-        Movement movementScript = player.GetComponent<Movement>();
-        if (movementScript != null && movementScript.IsSprint)
+        if (player)
         {
-            if (movementScript.IsSprint == true)
-            {
-                SpCollider.radius = 10;
-            } else {
-                return false;
-            }
+
         }
         return false;
     }
