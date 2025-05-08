@@ -320,6 +320,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 882250515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &425175725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5268285737592663900, guid: 73c0687f0e096ad4e88db49a69faea00,
+    type: 3}
+  m_PrefabInstance: {fileID: 6235214637066040926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &426772228
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,8 +559,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 1643925746}
-  jumpscareCanvas: {fileID: 0}
-  jumpscareSoundClip: {fileID: 0}
+  jumpscareCanvas: {fileID: 425175725}
+  jumpscareSoundClip: {fileID: 8300000, guid: 18a4532e1551d1f408d28fb9f5947faf, type: 3}
   triggerDistance: 2
   jumpscareDuration: 1.5
   triggerOnce: 1
@@ -1457,6 +1463,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1624660361203265041, guid: 73c0687f0e096ad4e88db49a69faea00,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612015433635854502, guid: 73c0687f0e096ad4e88db49a69faea00,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5268285737592663900, guid: 73c0687f0e096ad4e88db49a69faea00,
         type: 3}
       propertyPath: m_Name
@@ -1500,6 +1516,21 @@ PrefabInstance:
     - target: {fileID: 6191566549877260764, guid: 73c0687f0e096ad4e88db49a69faea00,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191566549877260764, guid: 73c0687f0e096ad4e88db49a69faea00,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191566549877260764, guid: 73c0687f0e096ad4e88db49a69faea00,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191566549877260764, guid: 73c0687f0e096ad4e88db49a69faea00,
+        type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6191566549877260764, guid: 73c0687f0e096ad4e88db49a69faea00,

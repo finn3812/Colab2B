@@ -1,8 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Undersystemmer/Animation/Base/Base Animator.controller.meta
 guid: 122b2fe21c35f3541aef61c17955b78e
+========
+guid: c527abdc85f20e64398e18b81826af28
+>>>>>>>> d4d623f9fde4a2a783401f8af8cffd89e7051898:Assets/Undersystemmer/PlayerControl/prefabs/texture 1.renderTexture.meta
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 8400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

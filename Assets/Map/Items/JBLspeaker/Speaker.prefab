@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2390732264808548607}
   - component: {fileID: 6070302669753602130}
   - component: {fileID: 618789239193840917}
+  - component: {fileID: 3061697381170488708}
   m_Layer: 0
   m_Name: Speaker
   m_TagString: Untagged
@@ -108,6 +109,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3061697381170488708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5069580268817729782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05bb96c3a057684299c126efb7bc019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8971466171037783409
 GameObject:
   m_ObjectHideFlags: 0
