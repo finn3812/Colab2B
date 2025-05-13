@@ -508,7 +508,7 @@ MonoBehaviour:
   - {fileID: 908889289}
   - {fileID: 41389104}
   Night: 0
-  AttackRange: 1
+  AttackRange: 0
   WaitTime: 0
   SoundMultiplier: 0
   ViewDistance: 50
@@ -517,6 +517,7 @@ MonoBehaviour:
   lastKnownPosition: {x: 0, y: 0, z: 0}
   agent: {fileID: 519837794}
   Health: 0
+  movementScript: {fileID: 0}
 --- !u!135 &519837800
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1084,7 +1085,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: fe2136a7b68ed3f49b8e43b8422b0a12, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 6653cde6f8f3dff40868102def5da4f7, type: 2}
   m_BuildHeightMesh: 0
 --- !u!65 &1695657321
 BoxCollider:
@@ -1193,7 +1194,7 @@ PrefabInstance:
     - target: {fileID: 8178477827141284478, guid: 5b2691a8f9fe1114e88498ebf7907038,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.78
+      value: 11.87
       objectReference: {fileID: 0}
     - target: {fileID: 8178477827141284478, guid: 5b2691a8f9fe1114e88498ebf7907038,
         type: 3}
