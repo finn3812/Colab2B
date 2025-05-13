@@ -9,8 +9,8 @@ public class IPadController : MonoBehaviour
     public RawImage[] cameraDisplays = new RawImage[4];
 
     // Navnet på din hovedspilscene
-    [Tooltip("Navnet på scenen der skal skiftes tilbage til (din hovedspilscene).")]
-    public string mainGameSceneName = "MainGameScene";
+    [Tooltip("Navnet på scenen der skal skiftes tilbage til (din hovedspilscene). SKAL MATCHE SecurityCameraManager's indstilling.")]
+    public string mainGameSceneName = "MainGameScene"; // Sørg for dette matcher hvad SecurityCameraManager bruger
 
     void Start()
     {
@@ -21,7 +21,7 @@ public class IPadController : MonoBehaviour
 
             // Sikrer at vi har nok displays og feeds at arbejde med
             int displayCount = Mathf.Min(cameraDisplays.Length, feeds.Length);
-            Debug.Log($"Forsøger at tildele {displayCount} kamerafeeds til displays.");
+            // Debug.Log($"Forsøger at tildele {displayCount} kamerafeeds til displays."); // Your original log
 
             for (int i = 0; i < displayCount; i++)
             {
@@ -30,7 +30,7 @@ public class IPadController : MonoBehaviour
                 {
                     cameraDisplays[i].texture = feeds[i];
                     cameraDisplays[i].enabled = true; // Sørg for at billedet er synligt
-                    Debug.Log($"Tildelte feed {i} til display {i}.");
+                    // Debug.Log($"Tildelte feed {i} til display {i}."); // Your original log
                 }
                 else
                 {
@@ -48,7 +48,7 @@ public class IPadController : MonoBehaviour
                 if (cameraDisplays[i] != null)
                 {
                     cameraDisplays[i].enabled = false;
-                    Debug.Log($"Deaktiverede ubrugt display index {i}.");
+                    // Debug.Log($"Deaktiverede ubrugt display index {i}."); // Your original log
                 }
             }
         }
@@ -60,6 +60,12 @@ public class IPadController : MonoBehaviour
             {
                 if (display != null) display.enabled = false;
             }
+        }
+
+        // Valgfrit: Tjek om scene navne er konsistente (hvis SCM findes)
+        if (SecurityCameraManager.Instance != null && SecurityCameraManager.Instance.mainGameSceneName != this.mainGameSceneName)
+        {
+            Debug.LogWarning($"IPadController: 'mainGameSceneName' ({this.mainGameSceneName}) er forskellig fra SecurityCameraManager's 'mainGameSceneName' ({SecurityCameraManager.Instance.mainGameSceneName}). Sørg for de er ens!");
         }
     }
 
@@ -83,9 +89,6 @@ public class IPadController : MonoBehaviour
         }
         Debug.Log($"Lukker iPad og skifter tilbage til scene: {mainGameSceneName}");
         SceneManager.LoadScene(mainGameSceneName);
-        // SecurityCameraManager (med DontDestroyOnLoad) vil stadig eksistere.
+        // SecurityCameraManager.Instance.OnSceneLoaded vil håndtere genoprettelse af spillerens position.
     }
-
-    // Valgfrit: Du kan tilføje en UI Knap på din iPad, der kalder CloseIPad()
-    // Se instruktioner i den oprindelige guide.
 }
