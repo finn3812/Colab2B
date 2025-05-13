@@ -21,7 +21,7 @@ public class NPC : MonoBehaviour
     public Transform[] WayPoints;
     public bool Night;
     // public Animation
-    public int AttackRange;
+    public float AttackRange;
     public int WaitTime;
     // public player.Sound = PlayerSound
     public float SoundMultiplier;
@@ -37,6 +37,7 @@ public class NPC : MonoBehaviour
 
     public void Start()
     {
+        
         movementScript = player.GetComponent<Movement>();
         SpCollider = transform.GetComponent<SphereCollider>();
 
@@ -121,8 +122,9 @@ public class NPC : MonoBehaviour
     {
         return Vector3.Distance(transform.position, player.position) <= AttackRange;
     }
-    public void OnTriggerEnter(Collider other)
+    virtual public void OnTriggerEnter(Collider other)
     {
+        AttackRange = 2.5f;
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player entered trigger zone!");
@@ -132,9 +134,14 @@ public class NPC : MonoBehaviour
             {
                 TransitionToState(new Chase(this));
             }
+            if (!(currentState is Attack) && IsPlayerInAttackRange())
+            {
+                TransitionToState(new Attack(this));
+            }
         }
     }
-        public void OnTriggerExit(Collider other)
+       
+   public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
