@@ -10,8 +10,4 @@ public class BaseNedarvning : NPC
         Debug.Log(currentState.ToString()); 
         ViewAngle = 360;
     }
-    public override bool CanHearPlayer()
-    {
-        return false;
-    }
 }
