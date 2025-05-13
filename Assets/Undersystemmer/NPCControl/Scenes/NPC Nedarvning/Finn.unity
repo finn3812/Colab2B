@@ -721,7 +721,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 714952659}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -734,6 +734,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &714952668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714952659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2065c41393c4d3c43910d00677d95486, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 3
 --- !u!1 &882250514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,7 +1188,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: fe2136a7b68ed3f49b8e43b8422b0a12, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 77346289dec71e848a22a7d3d67a540e, type: 2}
   m_BuildHeightMesh: 0
 --- !u!65 &1695657321
 BoxCollider:
@@ -1284,7 +1297,7 @@ PrefabInstance:
     - target: {fileID: 8178477827141284478, guid: 5b2691a8f9fe1114e88498ebf7907038,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.78
+      value: 11.39
       objectReference: {fileID: 0}
     - target: {fileID: 8178477827141284478, guid: 5b2691a8f9fe1114e88498ebf7907038,
         type: 3}
@@ -1414,6 +1427,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: finnskelet
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: e362881317609bc45a4372f244c5006e,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ba9330ee23a336b4f908746727996c1d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: e362881317609bc45a4372f244c5006e, type: 3}
@@ -1436,6 +1454,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 714952665}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e362881317609bc45a4372f244c5006e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 714952668}
   m_SourcePrefab: {fileID: 100100000, guid: e362881317609bc45a4372f244c5006e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
