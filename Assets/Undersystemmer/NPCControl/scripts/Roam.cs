@@ -78,6 +78,6 @@ public class Roam : IState
 
     public void Exit()
     {
-         Debug.Log("Exiting Roam State");
+         //Debug.Log("Exiting Roam State");
     }
 }
